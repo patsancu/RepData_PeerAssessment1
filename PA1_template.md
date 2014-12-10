@@ -16,20 +16,16 @@ NOTE: The GitHub repository also contains the dataset for the assignment so you 
 
 
 
-```{r,echo=FALSE}
-#   Load the data
-setwd("C://Users//patrick.sanzo/Downloads/Reproducible research//Week 2/RepData_PeerAssessment1/")
-```
-### Loading and preprocessing the data
-```{r,echo=TRUE}
 
+### Loading and preprocessing the data
+
+```r
 activityData <- read.csv("activity.csv")
 ```
 Process/transform the data (if necessary) into a format suitable for your analysis
-```{r,echo=TRUE}
 
+```r
 filteredData <- activityData[!is.na(activityData$steps),]
-
 ```
 
 ### What is mean total number of steps taken per day?
@@ -37,21 +33,26 @@ filteredData <- activityData[!is.na(activityData$steps),]
 For this part of the assignment, you can ignore the missing values in the dataset.
 
 - Make a histogram of the total number of steps taken each day
-```{r, echo=TRUE}
+
+```r
 totalStepsByDay <- tapply(activityData$steps, activityData$date, sum, simplify = T, na.rm=T)
 hist(totalStepsByDay, col="blue")
 ```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
 
 - Calculate and report the mean and median total number of steps taken per day
-```{r, echo=TRUE}
+
+```r
 meanStepsByDay <- tapply(activityData$steps, activityData$date, mean, simplify = T)
 medianStepsByDay <- tapply(activityData$steps, activityData$date, median, simplify = T,na.rm=T)
 ```
 ### What is the average daily activity pattern?
 - Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r, echo=TRUE}
+
+```r
 y <- tapply(activityData$steps, activityData$interval, mean, simplify = T, na.rm=T)
 x <- unique(activityData$interval) # automatically ordered
 plot(x, y, type = "l", xlab ="Interval", ylab="Average number of steps", col="green")
@@ -61,6 +62,8 @@ abline(v=unique(activityData$interval)[optimum], col="red")
 legendText = paste("Maximum value: ", as.character(unique(activityData$interval)[optimum]) )
 legend( legend = legendText ,max(y)*.8,x=max(x)*0.4 )
 ```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 - Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -72,7 +75,8 @@ Note that there are a number of days/intervals where there are missing values (c
 The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 - Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r, echo=TRUE}
+
+```r
 logicalVectorMissingValues <- is.na(activityData$steps) | is.na(activityData$steps) | is.na(activityData$interval)
 numberOfMissingValues <- sum(logicalVectorMissingValues)
 ```
@@ -85,7 +89,8 @@ interval, etc.
 
 - Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r, echo=TRUE}
+
+```r
 intervalMeans <- tapply(activityData$steps, activityData$interval, mean, simplify = T, na.rm=T)
 for (var in 1:nrow(activityData)) {
   if ( is.na(activityData[var,]$steps) ){
@@ -97,14 +102,18 @@ for (var in 1:nrow(activityData)) {
 
 - Make a histogram of the total number of steps taken each day 
 
-```{r, echo=TRUE}
+
+```r
 totalStepsByDay <- tapply(activityData$steps, activityData$date, sum, simplify = T, na.rm=T)
 hist(totalStepsByDay, col="red")
 ```
 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+
 - and Calculate and report the mean and median total number of steps taken per day. 
 
-```{r, echo=TRUE}
+
+```r
 meanStepsByDay <- tapply(activityData$steps, activityData$date, mean, simplify = T)
 medianStepsByDay <- tapply(activityData$steps, activityData$date, median, simplify = T,na.rm=T)
 ```
@@ -127,7 +136,8 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 
 - Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r, echo=TRUE}
+
+```r
 activityData$dayType <- "weekday"
 weekendDays <- weekdays(c(as.Date("1980-01-05"), as.Date("1980-01-06")),abbreviate=T) #Saturday and sunday
 activityData[weekdays(as.Date(activityData$date), abbreviate=T) %in% weekendDays,]$dayType <- "weekend" 
@@ -137,7 +147,8 @@ activityData[weekdays(as.Date(activityData$date), abbreviate=T) %in% weekendDays
 and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 *See the README file in the GitHub repository to see an example of what this plot should look like
 using simulated data.*
-```{r, echo=TRUE}
+
+```r
 par( mfrow = c( 2, 1 ) )
 workdays <- activityData[activityData$dayType == "weekday",]
 weekends <- activityData[activityData$dayType == "weekend",]
@@ -151,6 +162,8 @@ plot(x2, y2, type = "l", xlab ="Interval", ylab="Steps",col="blue")
 title(main = "Weekends")
 ```
 
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
+
 ***There are great differences, the number of steps taken on the [1000-2000] interval 
 are greater on weekends. Likewise, the number of steps taken on the [500-800] interval
-greater than the same interval on weekdays (workdays)***
+greater than the same interval on weekdays (workdays)***k
