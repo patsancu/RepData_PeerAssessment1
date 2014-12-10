@@ -137,7 +137,7 @@ activityData[weekdays(as.Date(activityData$date), abbreviate=T) %in% weekendDays
 and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 *See the README file in the GitHub repository to see an example of what this plot should look like
 using simulated data.*
-```{r, echo=TRUE}
+```{r, echo=TRUE, fig.height=10}
 par( mfrow = c( 2, 1 ) )
 workdays <- activityData[activityData$dayType == "weekday",]
 weekends <- activityData[activityData$dayType == "weekend",]
